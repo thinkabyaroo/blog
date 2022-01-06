@@ -12,14 +12,16 @@
                             <p class="alert alert-success">{{session('status')}}</p>
                         @endif
                             <div class="d-flex justify-content-between">
-                                {{$posts->links()}}
+                                {{$posts->appends(request()->all())->links()}}
 
                                 <div class="">
                                     <form >
-                                        <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
-                                        <button class="btn btn-outline-primary" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
+                                      <div class="btn-group ">
+                                          <input class="form-control me-2" type="text" name="search" placeholder="Search" aria-label="Search">
+                                          <button class="btn btn-outline-primary" id="button-addon2">
+                                              <i class="fas fa-search"></i>
+                                          </button>
+                                      </div>
                                     </form>
                                 </div>
                             </div>
@@ -28,6 +30,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Title</th>
+                                    <th>Photo</th>
                                     <th>Category</th>
                                     <th>Owner</th>
                                     <th>Control</th>
@@ -41,6 +44,14 @@
                                     <td>{{$post->id}}</td>
                                     <td>{{Str::words($post->title,10)}}</td>
                                     <td>
+                                        @forelse($post->photo as $photo)
+                                            <a class="venobox" data-gall="gallery{{$post->id}}" href="{{asset('storage/photo/'.$photo->name)}}"><img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="image alt"/></a>
+{{--                                            <img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="">--}}
+                                        @empty
+                                            <p class="text-muted small">no photo</p>
+                                        @endforelse
+                                    </td>
+                                    <td>
                                         <span class="badge small bg-primary">
                                             {{$post->category->title}}
                                         </span>
@@ -48,7 +59,7 @@
                                     <td>{{$post->user->name}}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a class="btn btn-sm btn-outline-primary">
+                                            <a href="{{route('post.show',$post->id)}}" class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-info fa-fw"></i>
                                             </a>
                                             <a href="{{route('post.edit',$post->id)}}" class="btn btn-sm btn-outline-primary">

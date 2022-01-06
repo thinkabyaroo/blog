@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -18,8 +21,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts=Post::when(request()->search,function ($q){
-            $q->where('title','like','%'.request()->search.'%');
+        $posts=Post::when(isset(request()->search),function ($q){
+            $keyword=request()->search;
+            $q->orWhere('title','like','%'.$keyword.'%')->orWhere('description','like',"%$keyword%");
 
         })->with(['user','category'])->latest('id')->paginate(7);
         return view('post.index',compact('posts'));
@@ -43,12 +47,20 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
+//        return $request;
+
         $request->validate([
 
             'title'=>'required|min:3|unique:posts,title',
             'category'=>'required|exists:categories,id',
             'description'=>'required|min:10',
+            'photo'=>'required',
+            'photo.*'=>'file|mimes:jpg,png|max:1024'
         ]);
+
+        if (!Storage::exists('public/thumbnail')){
+            Storage::makeDirectory('public/thumbnail');
+        }
         $post=new Post();
         $post->title=$request->title;
         $post->slug=Str::slug($request->title);
@@ -59,6 +71,26 @@ class PostController extends Controller
         $post->isPublish='1';
         $post->save();
 
+        if ($request->hasFile('photo')){
+            foreach ($request->file('photo') as $photo){
+                $newName=uniqid()."_photo.".$photo->extension();
+                $photo->storeAs('public/photo',$newName);
+
+
+                //ပုံသေး‌အောင်ချုံ့တာ
+                $img=Image::make($photo);
+                $img->fit(200,200);
+                $img->save("storage/thumbnail/".$newName,100);
+
+                $photo=new Photo();
+                $photo->name=$newName;
+                $photo->post_id=$post->id;
+                $photo->user_id=Auth::id();
+                $photo->save();
+
+            }
+        }
+//        return $request;
         return redirect()->route('post.index')->with("status","success");
     }
 
@@ -70,7 +102,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view('post.show',compact('post'));
     }
 
     /**
@@ -95,7 +127,7 @@ class PostController extends Controller
     {
         $request->validate([
 
-            'title'=>'required|min:3|unique:posts,title',
+            'title'=>'required|min:3|unique:posts,title,'.$post->id,
             'category'=>'required|exists:categories,id',
             'description'=>'required|min:10',
         ]);
@@ -105,8 +137,6 @@ class PostController extends Controller
         $post->category_id=$request->category;
         $post->description=$request->description;
         $post->excerpt=Str::words($request->description,20);
-        $post->user_id=Auth::id();
-        $post->isPublish='1';
         $post->update();
 
         return redirect()->route('post.index')->with("status","success");

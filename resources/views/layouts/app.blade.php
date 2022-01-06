@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -38,9 +38,6 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{route('category.create')}}" class="nav-link {{request()->url() == route('category.create') ? 'active':''}}">Manage Category</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('post.create')}}" class="nav-link {{request()->url() == route('post.create') ? 'active':''}}">Post Create</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -98,5 +95,13 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('js/app.js') }}" ></script>
+    <script>
+        new VenoBox({
+            selctor: '.venobox',
+            maxWidth: '440px'
+        });
+
+    </script>
 </body>
 </html>

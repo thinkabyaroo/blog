@@ -8,10 +8,9 @@
                         Manage Post
                     </div>
                     <div class="card-body">
-                        <form action="{{route('post.store')}}" method="post">
+                        <form action="{{route('post.store')}}" method="post" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="col-4">
                                 <div class="">
                                     <label for="">Post Title</label>
                                     <input type="text" value="{{old('title')}}" class="form-control @error('title') is-invalid @enderror " name="title">
@@ -19,9 +18,7 @@
                                 @error('title')
                                 <p class="text-danger small">{{$message}}</p>
                                 @enderror
-                            </div>
 
-                            <div class="col-4">
                                 <div class="">
                                     <label for="">Category</label>
                                     <select type="text" class="form-select @error('category') is-invalid @enderror " name="category">
@@ -34,8 +31,14 @@
                                 @error('category')
                                 <p class="text-danger small">{{$message}}</p>
                                 @enderror
-                            </div>
 
+                            <div class="">
+                                <label for="">Photo</label>
+                                <input type="file" name="photo[]" value="{{old('title')}}" class="form-control @error('photo') is-invalid @enderror" multiple>
+                                @error('photo')
+                                <p class="text-danger small">{{$message}}</p>
+                                @enderror
+                            </div>
 
                             <div class="col-4">
                                 <div class="">
@@ -52,6 +55,15 @@
                             </div>
 
                         </form>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
                     </div>
                 </div>
