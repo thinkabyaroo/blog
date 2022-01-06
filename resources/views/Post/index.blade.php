@@ -42,9 +42,9 @@
                                 @forelse($posts as $post)
                                 <tr>
                                     <td>{{$post->id}}</td>
-                                    <td>{{Str::words($post->title,10)}}</td>
+                                    <td>{{$post->title}}</td>
                                     <td>
-                                        @forelse($post->photo as $photo)
+                                        @forelse($post->photos()->latest('id')->limit(3)->get() as $photo)
                                             <a class="venobox" data-gall="gallery{{$post->id}}" href="{{asset('storage/photo/'.$photo->name)}}"><img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="image alt"/></a>
 {{--                                            <img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="">--}}
                                         @empty
@@ -62,9 +62,14 @@
                                             <a href="{{route('post.show',$post->id)}}" class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-info fa-fw"></i>
                                             </a>
+{{--                                            @if(\Illuminate\Support\Facades\Auth::id() == $post->user_id)--}}
+{{--                                            @can('post-edit',$post)--}}
+
+                                            @can('view',$post)
                                             <a href="{{route('post.edit',$post->id)}}" class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-pencil-alt fa-fw"></i>
                                             </a>
+                                            @endcan
                                             <button form="deletePost{{$post->id}}"  class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-trash-alt fa-fw"></i>
                                             </button>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -17,7 +18,11 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function photo(){
+    public function photos(){
         return $this->hasMany(Photo::class);
+    }
+
+    public function getTitleAttribute($value){
+        return Str::words($value,5);
     }
 }

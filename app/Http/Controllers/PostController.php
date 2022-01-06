@@ -8,6 +8,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -25,7 +26,7 @@ class PostController extends Controller
             $keyword=request()->search;
             $q->orWhere('title','like','%'.$keyword.'%')->orWhere('description','like',"%$keyword%");
 
-        })->with(['user','category'])->latest('id')->paginate(7);
+        })->with(['user','category','photos'])->latest('id')->paginate(7);
         return view('post.index',compact('posts'));
     }
 
@@ -36,6 +37,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create',Post::class);
         return view('post.create');
     }
 
@@ -49,14 +51,7 @@ class PostController extends Controller
     {
 //        return $request;
 
-        $request->validate([
 
-            'title'=>'required|min:3|unique:posts,title',
-            'category'=>'required|exists:categories,id',
-            'description'=>'required|min:10',
-            'photo'=>'required',
-            'photo.*'=>'file|mimes:jpg,png|max:1024'
-        ]);
 
         if (!Storage::exists('public/thumbnail')){
             Storage::makeDirectory('public/thumbnail');
@@ -113,6 +108,18 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+//        if (Auth::id() !=$post->user_id){
+
+
+        //  (!) = denines
+
+//        if (!Gate::allows('post-edit',$post)){
+//            return abort(403);
+//        }
+
+//        Gate::allows('post-edit',$post);
+
+        Gate::authorize('view',$post);
         return view('post.edit',compact('post'));
     }
 
@@ -150,6 +157,17 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        //delete photo files
+        foreach ($post->photos as $photo){
+            Storage::delete('public/photo/'.$photo->name);
+            Storage::delete('public/thumbnail/'.$photo->name);
+
+        }
+
+        //delete db records
+        $post->photos()->delete();
+
+        //post delete
         $post->delete();
         return redirect()->back();
     }
