@@ -25,4 +25,19 @@ class Post extends Model
     public function getTitleAttribute($value){
         return Str::words($value,5);
     }
+
+    public function getShowCreatedAtAttribute(){
+        return '<p class="small mb-0">
+                   <i class="fas fa-calendar"></i>
+                   '.$this->created_at->format('d m Y').'
+               </p>
+               <p class="small mb-0">
+                   <i class="fas fa-clock"></i>
+                   '.$this->created_at->format('h i a').'
+               </p>';
+    }
+
+    public function setSlugAttribute($value){
+        return $this->attributes['slug']=Str::slug($value);
+    }
 }

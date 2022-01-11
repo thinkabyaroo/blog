@@ -32,7 +32,9 @@
                                     <th>Title</th>
                                     <th>Photo</th>
                                     <th>Category</th>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->role==0)
                                     <th>Owner</th>
+                                    @endif
                                     <th>Control</th>
                                     <th>created_at</th>
 
@@ -56,7 +58,9 @@
                                             {{$post->category->title}}
                                         </span>
                                     </td>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->role==0)
                                     <td>{{$post->user->name}}</td>
+                                    @endif
                                     <td>
                                         <div class="btn-group">
                                             <a href="{{route('post.show',$post->id)}}" class="btn btn-sm btn-outline-primary">
@@ -70,9 +74,11 @@
                                                 <i class="fas fa-pencil-alt fa-fw"></i>
                                             </a>
                                             @endcan
+                                            @can('view',$post)
                                             <button form="deletePost{{$post->id}}"  class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-trash-alt fa-fw"></i>
                                             </button>
+                                            @endcan
                                         </div>
                                         <form action="{{route('post.destroy',$post->id)}}" class="d-none" id="deletePost{{$post->id}}" method="post">
                                             @csrf
@@ -81,15 +87,10 @@
 
 
                                     </td>
-                                    <td> <p class="small mb-0">
-                                            <i class="fas fa-calendar"></i>
-                                            {{$post->created_at->format('d m Y')}}
-                                        </p>
-                                        <p class="small mb-0">
-                                            <i class="fas fa-clock"></i>
-                                            {{$post->created_at->format('h i a')}}
-                                        </p>
-                                        {{$post->created_at->diffForHumans()}}</td>
+
+                                    <td>
+                                        {!! $post->show_created_at !!}
+                                    </td>
                                 </tr>
                                 @empty
                                     <tr>

@@ -17,6 +17,8 @@
                     {{ __('You are logged in!') }}
 
                     {{request()->url()}}
+
+                    {!! '<h1>Test </h1>' !!}
                 </div>
             </div>
         </div>

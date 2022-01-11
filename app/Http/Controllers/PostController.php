@@ -22,7 +22,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts=Post::when(isset(request()->search),function ($q){
+        $posts=Post::when(Auth::user()->role==1,function ($query){
+            $query->where('user_id',Auth::id());
+        })->when(isset(request()->search),function ($q){
             $keyword=request()->search;
             $q->orWhere('title','like','%'.$keyword.'%')->orWhere('description','like',"%$keyword%");
 
@@ -58,7 +60,7 @@ class PostController extends Controller
         }
         $post=new Post();
         $post->title=$request->title;
-        $post->slug=Str::slug($request->title);
+        $post->slug=$request->title;
         $post->category_id=$request->category;
         $post->description=$request->description;
         $post->excerpt=Str::words($request->description,20);
@@ -97,6 +99,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        return $post;
         return view('post.show',compact('post'));
     }
 
@@ -132,15 +135,15 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        $request->validate([
-
-            'title'=>'required|min:3|unique:posts,title,'.$post->id,
-            'category'=>'required|exists:categories,id',
-            'description'=>'required|min:10',
-        ]);
+//        $request->validate([
+//
+//            'title'=>'required|min:3|unique:posts,title,'.$post->id,
+//            'category'=>'required|exists:categories,id',
+//            'description'=>'required|min:10',
+//        ]);
 
         $post->title=$request->title;
-        $post->slug=Str::slug($request->title);
+        $post->slug=$request->title;
         $post->category_id=$request->category;
         $post->description=$request->description;
         $post->excerpt=Str::words($request->description,20);
@@ -157,6 +160,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+
+        Gate::authorize('delete',$post);
         //delete photo files
         foreach ($post->photos as $photo){
             Storage::delete('public/photo/'.$photo->name);
