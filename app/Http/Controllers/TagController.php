@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
@@ -25,7 +26,8 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        $tags=Tag::latest('id')->paginate(5);
+        return view('tag.create',compact('tags'));
     }
 
     /**
@@ -36,7 +38,17 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        //
+        $request->validate([
+            'title'=>'required|min:3|unique:categories,title',
+
+        ]);
+
+        $title=ucfirst($request->title);
+        $tag=new Tag();
+        $tag->title=$title;
+        $tag->user_id=Auth::id();
+        $tag->save();
+        return redirect()->route('tag.create')->with('status','success');
     }
 
     /**
@@ -58,7 +70,9 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        //
+        $tags=Tag::latest('id')->paginate(5);
+
+        return view('tag.edit',compact('tags','tag'));
     }
 
     /**
@@ -70,7 +84,14 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $request->validate([
+            'title'=>'required|min:3|unique:categories,title',
+
+        ]);
+        $tag->title=$request->title;
+        $tag->update();
+
+        return redirect()->route('tag.create')->with('status','success');
     }
 
     /**
@@ -81,6 +102,7 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        return redirect()->back();
     }
 }

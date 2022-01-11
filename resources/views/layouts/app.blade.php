@@ -39,6 +39,9 @@
                         <li class="nav-item">
                             <a href="{{route('category.create')}}" class="nav-link {{request()->url() == route('category.create') ? 'active':''}}">Manage Category</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('tag.create')}}" class="nav-link {{request()->url() == route('tag.create') ? 'active':''}}">Manage Tag</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Manage Post
