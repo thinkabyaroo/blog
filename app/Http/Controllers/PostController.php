@@ -22,13 +22,10 @@ class PostController extends Controller
      */
     public function index()
     {
+
         $posts=Post::when(Auth::user()->role==1,function ($query){
             $query->where('user_id',Auth::id());
-        })->when(isset(request()->search),function ($q){
-            $keyword=request()->search;
-            $q->orWhere('title','like','%'.$keyword.'%')->orWhere('description','like',"%$keyword%");
-
-        })->with(['user','category','photos'])->latest('id')->paginate(7);
+        })->search()->latest('id')->paginate(7);
         return view('post.index',compact('posts'));
     }
 
@@ -53,8 +50,6 @@ class PostController extends Controller
     {
 //        return $request;
 
-
-
         if (!Storage::exists('public/thumbnail')){
             Storage::makeDirectory('public/thumbnail');
         }
@@ -68,8 +63,10 @@ class PostController extends Controller
         $post->isPublish='1';
         $post->save();
 
-        if ($request->hasFile('photo')){
-            foreach ($request->file('photo') as $photo){
+        $post->tags()->attach($request->tags);
+
+        if ($request->hasFile('photos')){
+            foreach ($request->file('photos') as $photo){
                 $newName=uniqid()."_photo.".$photo->extension();
                 $photo->storeAs('public/photo',$newName);
 
@@ -99,7 +96,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return $post;
+       // return $post;
         return view('post.show',compact('post'));
     }
 
@@ -149,6 +146,9 @@ class PostController extends Controller
         $post->excerpt=Str::words($request->description,20);
         $post->update();
 
+        $post->tags()->detach();
+        $post->tags()->attach($request->tags);
+
         return redirect()->route('post.index')->with("status","success");
     }
 
@@ -168,6 +168,9 @@ class PostController extends Controller
             Storage::delete('public/thumbnail/'.$photo->name);
 
         }
+
+        //delete pivot record
+        $post->tags()->detach();
 
         //delete db records
         $post->photos()->delete();

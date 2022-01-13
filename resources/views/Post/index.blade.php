@@ -32,7 +32,9 @@
                                     <th>Title</th>
                                     <th>Photo</th>
                                     <th>Category</th>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->role==0)
+                                    <th>Tags</th>
+
+                                @if(\Illuminate\Support\Facades\Auth::user()->role==0)
                                     <th>Owner</th>
                                     @endif
                                     <th>Control</th>
@@ -46,7 +48,7 @@
                                     <td>{{$post->id}}</td>
                                     <td>{{$post->title}}</td>
                                     <td>
-                                        @forelse($post->photos()->latest('id')->limit(3)->get() as $photo)
+                                        @forelse($post->photos as $photo)
                                             <a class="venobox" data-gall="gallery{{$post->id}}" href="{{asset('storage/photo/'.$photo->name)}}"><img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="image alt"/></a>
 {{--                                            <img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="">--}}
                                         @empty
@@ -57,6 +59,14 @@
                                         <span class="badge small bg-primary">
                                             {{$post->category->title}}
                                         </span>
+                                    </td>
+                                    <td>
+                                        @foreach($post->tags as $tag)
+                                            <span class="badge small bg-secondary">
+                                                <i class="fas fa-hashtag"></i>
+                                            {{$tag->title}}
+                                        </span>
+                                        @endforeach
                                     </td>
                                     @if(\Illuminate\Support\Facades\Auth::user()->role==0)
                                     <td>{{$post->user->name}}</td>

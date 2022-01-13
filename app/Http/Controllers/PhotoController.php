@@ -41,14 +41,14 @@ class PhotoController extends Controller
     public function store(StorePhotoRequest $request)
     {
         $request->validate([
-            'photo'=>'required',
-            'photo.*'=>'file|mimes:jpg,png|max:5024',
+            'photos'=>'required',
+            'photos.*'=>'file|mimes:jpg,png|max:5024',
         ]);
         if (!Storage::exists('public/thumbnail')){
             Storage::makeDirectory('public/thumbnail');
         }
-        if ($request->hasFile('photo')){
-            foreach ($request->file('photo') as $photo){
+        if ($request->hasFile('photos')){
+            foreach ($request->file('photos') as $photo){
                 $newName=uniqid()."_photo.".$photo->extension();
                 $photo->storeAs('public/photo',$newName);
 

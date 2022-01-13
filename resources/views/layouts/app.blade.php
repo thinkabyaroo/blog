@@ -33,12 +33,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        @auth
                         <li class="nav-item ">
                             <a href="{{route('home')}}" class="nav-link {{request()->url() == route('home') ? 'active':''}}">Home</a>
                         </li>
+                        @isAdmin
                         <li class="nav-item">
                             <a href="{{route('category.create')}}" class="nav-link {{request()->url() == route('category.create') ? 'active':''}}">Manage Category</a>
                         </li>
+                        @endisAdmin
                         <li class="nav-item">
                             <a href="{{route('tag.create')}}" class="nav-link {{request()->url() == route('tag.create') ? 'active':''}}">Manage Tag</a>
                         </li>
@@ -53,6 +56,7 @@
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->

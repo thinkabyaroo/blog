@@ -33,6 +33,16 @@
                                 <p class="text-danger small">{{$message}}</p>
                                 @enderror
                             </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Post Tags</label>
+                                <br>
+                                @foreach(\App\Models\Tag::all() as $tag)
+                                    <input class="form-check-input" type="checkbox" {{in_array($tag->id,old('tags',$post->tags->pluck('id')->toArray()))?'checked':''}} name="tags[]" value="{{$tag->id}}" id="tag{{$tag->id}}">
+                                    <label class="form-check-label" for="tag{{$tag->id}}">
+                                        {{$tag->title}}
+                                    </label>
+                                @endforeach
+                            </div>
 
                             <div class="col-8">
                                 <div class="">

@@ -30,5 +30,9 @@ class AuthServiceProvider extends ServiceProvider
 //        Gate::define('post-edit',function (User $user,Post $post){
 //            return $user->id==$post->user_id;
 //        });
+
+        Gate::before(function ($user){
+            return $user->role==0;
+        });
     }
 }
