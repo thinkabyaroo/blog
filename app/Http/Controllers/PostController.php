@@ -8,10 +8,12 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use mysql_xdevapi\Exception;
 
 class PostController extends Controller
 {
@@ -53,6 +55,13 @@ class PostController extends Controller
         if (!Storage::exists('public/thumbnail')){
             Storage::makeDirectory('public/thumbnail');
         }
+
+//        DB::transaction(function () use ($request){
+
+        //try catch testing
+//        try{
+//            DB::beginTransaction();
+
         $post=new Post();
         $post->title=$request->title;
         $post->slug=$request->title;
@@ -84,6 +93,16 @@ class PostController extends Controller
 
             }
         }
+//        });
+
+            //try catch //error
+//            DB::commit();
+//        }catch (\Exception $e){
+//            DB::rollBack();
+//            throw $e;
+//        }
+
+
 //        return $request;
         return redirect()->route('post.index')->with("status","success");
     }

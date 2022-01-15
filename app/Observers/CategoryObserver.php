@@ -14,7 +14,7 @@ class CategoryObserver
      */
     public function created(Category $category)
     {
-        logger("create category");
+//        logger("create category");
 
     }
 

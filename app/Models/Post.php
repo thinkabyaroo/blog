@@ -62,11 +62,11 @@ class Post extends Model
     //event
     protected static function booted()
     {
-        static::created(function (){
-            DB::Listen(function ($query){
-                logger(json_encode($query));
-            });
-        });
+//        static::created(function (){
+//            DB::Listen(function ($query){
+//                logger(json_encode($query));
+//            });
+//        });
     }
 
 }
