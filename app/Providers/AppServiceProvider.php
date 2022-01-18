@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View;
+use PhpParser\Node\Expr\Cast\Object_;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +32,20 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
+
+
+        DB::listen(function ($q){
+            logger($q->sql,$q->bindings);
+        });
+
+        \Illuminate\Support\Facades\View::composer(['welcome','auth.login'],function (){
+            \Illuminate\Support\Facades\View::share('my',Category::all());
+
+        });
+
+
+
+
         Blade::if('isAdmin',function (){
             return Auth::user()->role ==0; //(===) admin
         });

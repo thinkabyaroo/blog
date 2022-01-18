@@ -35,4 +35,12 @@ class StorePostRequest extends FormRequest
             'tags.*'=>'exists:tags,id',
         ];
     }
+
+    //custom message
+    public function messages()
+    {
+        return [
+            "title:required"=>"title",
+        ];
+    }
 }

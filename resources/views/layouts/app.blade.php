@@ -35,11 +35,13 @@
                     <ul class="navbar-nav me-auto">
                         @auth
                         <li class="nav-item ">
-                            <a href="{{route('home')}}" class="nav-link {{request()->url() == route('home') ? 'active':''}}">Home</a>
+                            <x-nav-link name="home">Home</x-nav-link>
                         </li>
                         @isAdmin
                         <li class="nav-item">
-                            <a href="{{route('category.create')}}" class="nav-link {{request()->url() == route('category.create') ? 'active':''}}">Manage Category</a>
+                            <x-nav-link name="category.create">manage category</x-nav-link>
+
+{{--                            <a href="{{route('category.create')}}" class="nav-link {{request()->url() == route('category.create') ? 'active':''}}">Manage Category</a>--}}
                         </li>
                         @endisAdmin
                         <li class="nav-item">

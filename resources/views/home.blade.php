@@ -14,11 +14,17 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+{{--                    {{ __('You are logged in!') }}--}}
 
-                    {{request()->url()}}
+{{--                    {{request()->url()}}--}}
 
-                    {!! '<h1>Test </h1>' !!}
+{{--                    {!! '<h1>Test </h1>' !!}--}}
+                    {{auth()->user()->photos}}
+{{--                    {{$my->name}}--}}
+
+                    <x-alert class="p-5" type="danger">hello world</x-alert>
+                        <x-alert class="p-1">hello hello</x-alert>
+
                 </div>
             </div>
         </div>

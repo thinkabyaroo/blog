@@ -13,8 +13,9 @@
                             @method('put')
                             <div class="col-8">
                                 <div class="">
-                                    <label for="">Post Title</label>
-                                    <input type="text" value="{{old('title',$post->title)}}" class="form-control @error('title') is-invalid @enderror " name="title">
+                                    <x-input :value="$post->title" title="title" inputLabel="Post title"></x-input>
+{{--                                    <label for="">Post Title</label>--}}
+{{--                                    <input type="text" value="{{old('title',$post->title)}}" class="form-control @error('title') is-invalid @enderror " name="title">--}}
                                 </div>
                                 @error('title')
                                 <p class="text-danger small">{{$message}}</p>

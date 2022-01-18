@@ -4,6 +4,7 @@
         <th>#</th>
         <th>Title</th>
         <th>Owner</th>
+        <th>Photo</th>
         <th>Control</th>
         <th>Created_at</th>
     </tr>
@@ -14,6 +15,7 @@
             <td>{{$category->id}}</td>
             <td>{{$category->title}}</td>
             <td> {{$category->user->name}}</td>
+            <td>{{$category->photos}}</td>
             <td>
                 <a href="{{route('category.edit',$category->id)}}" class="btn btn-outline-warning">
                         <i class="fas fa-pencil-alt fa-fw"></i>
