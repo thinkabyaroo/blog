@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
         Post::factory(200)->create();
         Tag::factory(20)->create();
 
+        Post::all()->each(function ($post){
+            $post->tags()->attach(Tag::inRandomOrder()->limit(rand(1,4))->get()->pluck('id'));
+        });
+
         User::create([
             'name'=>'thin kabyar',
             'email'=>'admin@gmail.com',
