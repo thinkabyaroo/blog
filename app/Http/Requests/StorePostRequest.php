@@ -40,7 +40,7 @@ class StorePostRequest extends FormRequest
     public function messages()
     {
         return [
-            "title:required"=>"title",
+            "title.required"=>"title ttt",
         ];
     }
 }

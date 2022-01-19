@@ -1,4 +1,4 @@
-<label for="">$inputLabel</label>
+<label for="">{{$inputLabel}}</label>
 <input type="text"
 
        @if($value)
