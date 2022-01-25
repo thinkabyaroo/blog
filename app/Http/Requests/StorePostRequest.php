@@ -40,7 +40,8 @@ class StorePostRequest extends FormRequest
     public function messages()
     {
         return [
-            "title.required"=>"title ttt",
+            "title.required"=>"ခေါင်းစဥ်ထည့်လေ",
+            "photos.required"=>"ပုံထည့်လေ ကွာ"
         ];
     }
 }
