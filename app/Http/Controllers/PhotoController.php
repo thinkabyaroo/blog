@@ -100,7 +100,7 @@ class PhotoController extends Controller
      */
     public function update(UpdatePhotoRequest $request, Photo $photo)
     {
-        //
+
     }
 
     /**

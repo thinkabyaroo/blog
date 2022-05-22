@@ -72,7 +72,7 @@
                         <form action="{{route('photo.store')}}" method="post" enctype="multipart/form-data" id="uploaderForm" class="d-none">
                             @csrf
                             <input type="hidden" value="{{$post->id}}" name="post_id">
-                            <input type="file" class="form-control" accept="image/jpeg,image/png" id="uploaderInput" name="photo[]" multiple >
+                            <input type="file" class="form-control" accept="image/jpeg,image/png" id="uploaderInput" name="photos[]" multiple >
                             <button class="btn btn-outline-primary">Upload</button>
                         </form>
                         <div class="mb-3 ">

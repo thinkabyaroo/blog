@@ -76,7 +76,7 @@ class PostController extends Controller
 
         if ($request->hasFile('photos')){
             foreach ($request->file('photos') as $photo){
-                $newName=uniqid()."_photo.".$photo->extension();
+                $newName=uniqid()."_photo".'.'.$photo->extension();
                 $photo->storeAs('public/photo',$newName);
 
 

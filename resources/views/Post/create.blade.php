@@ -46,7 +46,7 @@
 
                             <div class="mb-3">
                                 <label for="">Photo</label>
-                                <input type="file" name="photos[]" value="{{old('title')}}" class="form-control @error('photo') is-invalid @enderror" multiple>
+                                <input type="file" name="photos[]" value="{{old('photos')}}" class="form-control @error('photo') is-invalid @enderror" multiple>
                                 @error('photos')
                                 <p class="text-danger small">{{$message}}</p>
                                 @enderror

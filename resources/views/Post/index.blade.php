@@ -49,7 +49,8 @@
                                     <td>{{$post->title}}</td>
                                     <td>
                                         @forelse($post->photos as $photo)
-                                            <a class="venobox" data-gall="gallery{{$post->id}}" href="{{asset('storage/photo/'.$photo->name)}}"><img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="image alt"/></a>
+                                            <a class="venobox" data-gall="gallery{{$post->id}}" href="{{asset('storage/photo/'.$photo->name)}}">
+                                                <img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="image alt"/></a>
 {{--                                            <img src="{{asset('storage/thumbnail/'.$photo->name)}}" height="40" alt="">--}}
                                         @empty
                                             <p class="text-muted small">no photo</p>
